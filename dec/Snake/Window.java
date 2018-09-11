@@ -58,7 +58,6 @@ public class Window extends JFrame{
 			}
 		}
 
-        JPanel btnPanel = new JPanel();
 		getContentPane().add(gui, BorderLayout.CENTER);
 		
         JToolBar vertical = new JToolBar(JToolBar.VERTICAL);
