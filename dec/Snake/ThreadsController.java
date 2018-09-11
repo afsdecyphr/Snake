@@ -50,7 +50,7 @@ public class ThreadsController extends Thread {
 		spawnFood(foodPosition);
 
 		sizeSnake=3;
-		speed = 100;
+		speed = 1;
 		end = false;
 		pause = false;
 		System.out.println("tc");
@@ -66,7 +66,11 @@ public class ThreadsController extends Thread {
 				 } else {
 					 avg = 0;
 				 }
-				 Window.label.setText("Length: " + sizeSnake + "         " + "Max Length: " + Window.maxLength + "         " + "Average: " + avg + "         " + "Total: " + total + "         " + "Run Count: " + (runs));
+				 Window.lengthLbl.setText("Length: " + sizeSnake);
+				 Window.maxLbl.setText("Max Length: " + Window.maxLength);
+				 Window.avgLbl.setText("Average Length: " + avg);
+				 Window.totalLbl.setText("Total: " + total);
+				 Window.runsLbl.setText("Runs: " + runs);
 				 if (sizeSnake > Window.maxLength) {
 					 Window.maxLength = sizeSnake;
 				 }
@@ -79,11 +83,19 @@ public class ThreadsController extends Thread {
 				 checkCollision();
 				 moveExterne();
 		         Squares.get(headSnakePos.x).get(headSnakePos.y).lightMeUp(3);
+//		         for (int i = 0; i <= snakeai.oldTuples.size() - 1; i++) {
+//		             Tuple tup = SnakeAI.oldTuples.get(i);
+//			         Squares.get(tup.x).get(tup.y).lightMeUp(4);
+//		         }
 				 deleteTail();
 				 pauser();
 		         oldTuples = ThreadsController.positions;
 			 }
 	         Squares.get(headSnakePos.x).get(headSnakePos.y).lightMeUp(3);
+//	         for (int i = 0; i <= snakeai.oldTuples.size() - 1; i++) {
+//	             Tuple tup = SnakeAI.oldTuples.get(i);
+//		         Squares.get(tup.x).get(tup.y).lightMeUp(4);
+//	         }
 		 }
 	 }
 	 
@@ -138,7 +150,6 @@ public class ThreadsController extends Thread {
 				 snakeai.setFoodPos(foodPosition);
 				 deleteTail();
 				ThreadsController.end = false;
-				Window.label.setForeground(Color.black);
 				runs++;
 			} else {
 				try {

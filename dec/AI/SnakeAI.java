@@ -5,11 +5,12 @@ import java.util.List;
 
 import Snake.ThreadsController;
 import Snake.Tuple;
-import AI.Star;
+import AI.AStar;
 import Snake.Window;
 
 public class SnakeAI {
 	static Tuple foodPosition = ThreadsController.foodPosition;
+	public static ArrayList < Tuple > oldTuples = new ArrayList<Tuple>();
 	
 	public SnakeAI() {
 		
@@ -27,9 +28,8 @@ public class SnakeAI {
 			//int[] block = new int[]{snakeBody.get(i).getX(),snakeBody.get(i).getY()};
 			//blocked[i] = block;
 		//}
-		Star astar = new Star();
+		AStar astar = new AStar();
 		Tuple tup = astar.test(Window.playArea, Window.playArea, snakeHead.getX(), snakeHead.getY(), foodPosition.getX(), foodPosition.getY(), blocked);
-		int moveDirection = 0;
 		//System.out.println(tup.x + " " + tup.y);
 		
 		// moveDirection 
@@ -42,41 +42,33 @@ public class SnakeAI {
 			if (snakeHead.x - tup.x > 0) {
 				if(ThreadsController.directionSnake!=1) {
 					steps.add(2);
-					moveDirection = 2;
 					//System.out.println("x<: " + (snakeHead.x - tup.x));
 				} else {
 					steps.add(1);
-					moveDirection = 1;
 				}
 			}
 			if (snakeHead.x - tup.x < 0) {
 				if(ThreadsController.directionSnake!=2) {
 					steps.add(1);
-					moveDirection = 1;
 					//System.out.println("x>: " + (snakeHead.x - tup.x));
 				} else {
 					steps.add(2);
-					moveDirection = 2;
 				}
 			}
 			if (snakeHead.y - tup.y < 0) {
 				if(ThreadsController.directionSnake!=3) {
 					steps.add(4);
-					moveDirection = 4;
 					//System.out.println("y<: " + (snakeHead.y - tup.y));
 				} else {
 					steps.add(3);
-					moveDirection = 3;
 				}
 			} 
 			if (snakeHead.y - tup.y > 0) {
 				if(ThreadsController.directionSnake!=4) {
 					steps.add(3);
-					moveDirection = 3;
 					//System.out.println("y>: " + (snakeHead.y - tup.y));
 				} else {
 					steps.add(4);
-					moveDirection = 4;
 				}
 			}
 		}

@@ -13,7 +13,9 @@ import java.awt.event.KeyEvent;
 		    	case 38:	// -> Top
 							//if(ThreadsController.directionSnake!=4) 
 							//	ThreadsController.directionSnake=3;
-		    				ThreadsController.speed = ThreadsController.speed + 10;
+				    		if (ThreadsController.speed > 10) {
+			    				ThreadsController.speed = ThreadsController.speed - 10;
+				    		}
 		    				break;
 		    				
 		    	case 37: 	// -> Left 
@@ -24,9 +26,7 @@ import java.awt.event.KeyEvent;
 		    	case 40:	// -> Bottom
 							//if(ThreadsController.directionSnake!=3)
 							//	ThreadsController.directionSnake=4;
-				    		if (ThreadsController.speed > 10) {
-			    				ThreadsController.speed = ThreadsController.speed - 10;
-				    		}
+    						ThreadsController.speed = ThreadsController.speed + 10;
 		    				break;
 		    				
 		    	case 32:	// -> Space

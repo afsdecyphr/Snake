@@ -5,10 +5,10 @@ import java.util.*;
 import Snake.ThreadsController;
 import Snake.Tuple;
 
-public class Star {
+public class AStar {
     public final int DIAGONAL_COST = 14;
     public final int V_H_COST = 10;
-    public ArrayList < Tuple > oldTuples = null;
+    ArrayList < Tuple > oldTuples = new ArrayList<Tuple>();
 
     class Cell {
         int heuristicCost = 0; //Heuristic cost
@@ -25,10 +25,18 @@ public class Star {
         public String toString() {
             return "[" + this.i + ", " + this.j + "]";
         }
+        public Integer getX() {
+            return this.i;
+        }
+        public Integer getY() {
+            return this.j;
+        }
     }
 
     //Blocked cells are just null Cell values in grid
     Cell[][] grid = new Cell[50][50];
+    //Blocked cells are just null Cell values in grid
+    Cell[][] gridBak = new Cell[50][50];
     //Blocked cells are just null Cell values in grid
     Cell[][] grid2 = new Cell[50][50];
 
@@ -64,7 +72,7 @@ public class Star {
         }
     }
 
-    public void AStar() {
+    public void Star() {
 
         //add the start location to open list.
         //System.out.println(startI + " ; " + startJ);
@@ -136,9 +144,21 @@ public class Star {
     int[][] blocked = array containing inaccessible cell coordinates
     */
     public Tuple test(int x, int y, int si, int sj, int ei, int ej, int[][] blocked) {
+    	oldTuples = SnakeAI.oldTuples;
         boolean printGrid = true;
+        boolean destroyOldBlockedSquares = false;
         //Reset
         grid = new Cell[x][y];
+
+        if (!destroyOldBlockedSquares) {
+            for (int i = 0; i < x; ++i) {
+                for (int j = 0; j < x; ++j) {
+                	if (gridBak[i][j] == null) {
+                		grid[i][j] = null;
+                	}
+                }
+            }
+        }
         closed = new boolean[x][y];
         open = new PriorityQueue<>((Object o1, Object o2) -> {
 	        Cell c1 = (Cell)o1;
@@ -156,9 +176,9 @@ public class Star {
             for (int j = 0; j < y; ++j) {
                 grid[i][j] = new Cell(i, j);
                 grid[i][j].heuristicCost = Math.abs(i - endI) + Math.abs(j - endJ);
-                //                  System.out.print(grid[i][j].heuristicCost+" ");
+                                  //System.out.print(grid[i][j].heuristicCost+" ");
             }
-            //              System.out.println();
+            //System.out.println();
         }
         grid[si][sj].finalCost = 0;
 
@@ -166,17 +186,16 @@ public class Star {
           Set blocked cells. Simply set the cell values to null
           for blocked cells.
         */
-        if (oldTuples != null) {
-            for (int ii = 0; ii <= oldTuples.size() - 1; ii++) {
-                grid[oldTuples.get(ii).getX()][oldTuples.get(ii).getY()] = new Cell(oldTuples.get(ii).getX(), oldTuples.get(ii).getY());
-            }
-        }
         for (int i = 0; i <= ThreadsController.positions.size() - 1; i++) {
             Tuple tup = ThreadsController.positions.get(i);
             grid[tup.getX()][tup.getY()] = null;
         }
+//        for (int i = 0; i <= SnakeAI.oldTuples.size() - 1; i++) {
+//            Tuple tup = SnakeAI.oldTuples.get(i);
+//            grid[tup.getX()][tup.getY()] = null;
+//        }
         
-        AStar();
+        Star();
         for (int i = 0; i < x; ++i) {
             for (int j = 0; j < x; ++j) {
                 grid2[i][j] = new Cell(i, j);
@@ -185,7 +204,6 @@ public class Star {
 
         Tuple tup = null;
         Tuple tup2 = null;
-        boolean gotTup = false;
         ArrayList < Cell > cells = new ArrayList < Cell > ();
         if (closed[endI][endJ]) {
             //Trace back the path 
@@ -196,7 +214,6 @@ public class Star {
             cells.add(current);
             grid2[current.i][current.j] = null;
             System.out.println(current);
-            gotTup = true;
             int ii = 0;
             int count = 0;
             while (currentCounter.parent != null) {
@@ -226,6 +243,11 @@ public class Star {
         } else {
             System.out.println("No possible path");
             Cell current = grid[endI][endJ];
+            if (current == null) {
+            	oldTuples.remove(new Tuple(endI,endJ));
+                grid[endI][endJ] = new Cell(endI, endJ);
+                current = grid[endI][endJ];
+            }
             cells.add(current);
             //System.out.print(current);
             tup = new Tuple(current.i, current.j);
@@ -252,8 +274,10 @@ public class Star {
                 System.out.println();
             }
         }
-        
-        oldTuples = ThreadsController.positions;
+
+        gridBak = grid;
+        SnakeAI.oldTuples.addAll(0, ThreadsController.positions);
+        System.out.println(oldTuples.size());
 
         System.out.println("headpos: [" + si + ", " + sj + "]");
         if (tup != null) {
