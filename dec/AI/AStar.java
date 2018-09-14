@@ -145,8 +145,8 @@ public class AStar {
     */
     public Tuple test(int x, int y, int si, int sj, int ei, int ej, int[][] blocked) {
     	oldTuples = SnakeAI.oldTuples;
-        boolean printGrid = true;
-        boolean destroyOldBlockedSquares = false;
+        boolean printGrid = false;
+        boolean destroyOldBlockedSquares = true;
         //Reset
         grid = new Cell[x][y];
 
@@ -186,7 +186,7 @@ public class AStar {
           Set blocked cells. Simply set the cell values to null
           for blocked cells.
         */
-        for (int i = 0; i <= ThreadsController.positions.size() - 1; i++) {
+        for (int i = 0; i <= ThreadsController.positions.size()-1; i++) {
             Tuple tup = ThreadsController.positions.get(i);
             grid[tup.getX()][tup.getY()] = null;
         }
@@ -207,41 +207,41 @@ public class AStar {
         ArrayList < Cell > cells = new ArrayList < Cell > ();
         if (closed[endI][endJ]) {
             //Trace back the path 
-            System.out.println("Path: ");
+            //System.out.println("Path: ");
             Cell current = grid[endI][endJ];
             Cell currentCounter = grid[endI][endJ];
             Cell current_bak = grid[endI][endJ];
             cells.add(current);
             grid2[current.i][current.j] = null;
-            System.out.println(current);
+            //System.out.println(current);
             int ii = 0;
             int count = 0;
             while (currentCounter.parent != null) {
             	count++;
             	currentCounter = currentCounter.parent;
             }
-            System.out.println("count: " + count);
+            //System.out.println("count: " + count);
             while (current_bak.parent != null) {
                 //System.out.print(" -> " + current_bak.parent);
                 grid2[current_bak.parent.i][current_bak.parent.j] = null;
                 current_bak = current_bak.parent;
                 cells.add(current_bak);
-                System.out.println("ii: " + ii);
+                //System.out.println("ii: " + ii);
                 if (ii == 1) {
                     tup2 = new Tuple(current.i, current.j);
-                    System.out.println("ii == 1");
+                    //System.out.println("ii == 1");
                 } else if (ii == count-2) {
                     tup = new Tuple(current_bak.i, current_bak.j);
-                    System.out.println("ii == count-1");
+                    //System.out.println("ii == count-1");
                 } else {
                     tup2 = new Tuple(current.i, current.j);
-                    System.out.println("else");
+                    //System.out.println("else");
                 }
                 ii++;
             }
-            System.out.println();
+            //System.out.println();
         } else {
-            System.out.println("No possible path");
+            //System.out.println("No possible path");
             Cell current = grid[endI][endJ];
             if (current == null) {
             	oldTuples.remove(new Tuple(endI,endJ));
@@ -277,14 +277,14 @@ public class AStar {
 
         gridBak = grid;
         SnakeAI.oldTuples.addAll(0, ThreadsController.positions);
-        System.out.println(oldTuples.size());
+        //System.out.println(oldTuples.size());
 
-        System.out.println("headpos: [" + si + ", " + sj + "]");
+        //System.out.println("headpos: [" + si + ", " + sj + "]");
         if (tup != null) {
-            System.out.println("tup: " + tup);
+            //System.out.println("tup: " + tup);
             return tup;
         } else {
-            System.out.println("tup2: " + tup2);
+            //System.out.println("tup2: " + tup2);
             return tup2;
         }
     }

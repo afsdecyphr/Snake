@@ -1,4 +1,5 @@
 package Snake;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import AI.SnakeAI;
 
@@ -116,11 +117,15 @@ public class ThreadsController extends Thread {
 	 }
 	 
 	 private void checkCollision() {
+		 Main.f1.pack();;
+		 Rectangle r = Main.f1.getBounds();
+		 Main.f1.setSize(r.width-200, r.height-200);
+		 System.out.println(Main.f1.getBounds().width + ", " + Main.f1.getBounds().height);
 		 Tuple posCritique = positions.get(positions.size()-1);
 		 for(int i = 0;i<=positions.size()-2;i++){
 			 boolean biteItself = posCritique.getX()==positions.get(i).getX() && posCritique.getY()==positions.get(i).getY();
 			 if(biteItself){
-				 Squares.get(foodPosition.x).get(foodPosition.y).lightMeUp(2);
+				 Squares.get(foodPosition.x).get(foodPosition.y).lightMeUp(0);
 				 total = total + sizeSnake;
 				 end = true;
 				 stopTheGame();
@@ -216,10 +221,16 @@ public class ThreadsController extends Thread {
 	 }
 	 
 	 private static void moveExterne(){
-		 for(Tuple t : positions){
-			 int y = t.getY();
+		 int i = 0;
+		 for(Tuple t : positions) {
 			 int x = t.getX();
-			 Squares.get(x).get(y).lightMeUp(0);
+			 int y = t.getY();
+			 if ( (i & 1) == 0 ) { 
+				 Squares.get(x).get(y).lightMeUp(2);
+			 } else {
+				 Squares.get(x).get(y).lightMeUp(5);
+			 }
+			 i++;
 			 
 		 }
 	 }
@@ -229,7 +240,7 @@ public class ThreadsController extends Thread {
 		 for(int i = positions.size()-1;i>=0;i--){
 			 if(cmpt==0){
 				 Tuple t = positions.get(i);
-				 Squares.get(t.x).get(t.y).lightMeUp(2);
+				 Squares.get(t.x).get(t.y).lightMeUp(0);
 			 }
 			 else{
 				 cmpt--;

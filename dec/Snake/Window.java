@@ -7,6 +7,7 @@ import java.awt.Insets;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
 
+import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JPanel;
@@ -32,6 +33,8 @@ public class Window extends JFrame{
 	public static ThreadsController c;
 	public static Container content;
 	public static int maxLength = 3;
+    public JToolBar vertical = new JToolBar(JToolBar.VERTICAL);
+	
 	public Window(){
         JPanel gui = new JPanel(new BorderLayout((playArea + 1), playArea));
 		
@@ -42,14 +45,14 @@ public class Window extends JFrame{
 		for(int i=0;i<playArea;i++){
 			data= new ArrayList<DataOfSquare>();
 			for(int j=0;j<playArea;j++){
-				DataOfSquare c = new DataOfSquare(2);
+				DataOfSquare c = new DataOfSquare(0);
 				data.add(c);
 			}
 			Grid.add(data);
 		}
 		
         content = new JPanel(new GridLayout(playArea,playArea,0,0));
-        content.setMaximumSize(new Dimension(400, 400));
+        content.setMaximumSize(new Dimension(50, 50));
         gui.add(content);
 		
 		for(int i=0;i<playArea;i++){
@@ -60,16 +63,16 @@ public class Window extends JFrame{
 
 		getContentPane().add(gui, BorderLayout.CENTER);
 		
-        JToolBar vertical = new JToolBar(JToolBar.VERTICAL);
         vertical.setFloatable(false);
-        vertical.setMargin(new Insets(0, 0, 0, 10));
 
         vertical.add(lengthLbl);
         vertical.add(maxLbl);
         vertical.add(avgLbl);
         vertical.add(totalLbl);
         vertical.add(runsLbl);
-
+        
+        vertical.setLayout(new BoxLayout(vertical, BoxLayout.Y_AXIS));
+        vertical.setAlignmentY(CENTER_ALIGNMENT);
         getContentPane().add(vertical, BorderLayout.WEST);
 		
 		Tuple position = new Tuple(10,10);
@@ -77,5 +80,9 @@ public class Window extends JFrame{
 		c.start();
 
 		this.addKeyListener((KeyListener) new KeyboardListener());
+	}
+	public void resetVertical(int vertHeight, int frameHeight, JToolBar panel) {
+        int topMargin = (frameHeight / 2) - (vertHeight / 2);
+        panel.setMargin(new Insets(topMargin, 0, 0, 10));
 	}
 }
